@@ -17,9 +17,8 @@ import Link from "next/link";
 export default function DriveContents(props: {
   files: (typeof files.$inferSelect)[];
   folders: (typeof folders.$inferSelect)[];
+  parents: (typeof folders.$inferSelect)[];
 }) {
-  const breadcrumb: unknown[] = [];
-
   return (
     <div className="dark min-h-screen w-full bg-background">
       <div className="container mx-auto min-h-screen max-w-6xl p-4 text-foreground">
@@ -30,15 +29,15 @@ export default function DriveContents(props: {
                 <Link href="/f/1">My drive</Link>
               </BreadcrumbItem>
 
-              {breadcrumb.map((folder, index) => (
-                <>
+              {props.parents.map((folder, index) => (
+                <React.Fragment key={folder.id}>
                   <BreadcrumbSeparator />
-                  <BreadcrumbItem key={index}>
+                  <BreadcrumbItem>
                     <BreadcrumbLink href={`/f/${folder.id}`}>
                       {folder.name}
                     </BreadcrumbLink>
                   </BreadcrumbItem>
-                </>
+                </React.Fragment>
               ))}
             </BreadcrumbList>
           </Breadcrumb>
