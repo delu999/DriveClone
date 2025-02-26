@@ -11,13 +11,13 @@ import {
 import { Upload } from "lucide-react";
 import { FileRow, FolderRow } from "~/app/file-row";
 import React from "react";
-import { files, folders } from "~/server/db/schema";
+import { files_table, folders_table } from "~/server/db/schema";
 import Link from "next/link";
 
 export default function DriveContents(props: {
-  files: (typeof files.$inferSelect)[];
-  folders: (typeof folders.$inferSelect)[];
-  parents: (typeof folders.$inferSelect)[];
+  files: (typeof files_table.$inferSelect)[];
+  folders: (typeof folders_table.$inferSelect)[];
+  parents: (typeof folders_table.$inferSelect)[];
 }) {
   return (
     <div className="dark min-h-screen w-full bg-background">
