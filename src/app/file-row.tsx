@@ -1,6 +1,12 @@
 import React from "react";
 import { FileItem, FolderItem } from "~/lib/mock-data";
-import { FolderIcon, FileIcon, ImageIcon, FileTextIcon, MoreVertical } from "lucide-react";
+import {
+  FolderIcon,
+  FileIcon,
+  ImageIcon,
+  FileTextIcon,
+  MoreVertical,
+} from "lucide-react";
 import { Button } from "~/components/ui/button";
 import {
   DropdownMenu,
@@ -8,13 +14,13 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "~/components/ui/dropdown-menu";
+import Link from "next/link";
 
 interface FileRowProps {
   item: FileItem | FolderItem;
-  onFolderClick?: (folder: FolderItem) => void;
 }
 
-export function FileRow({ item, onFolderClick }: FileRowProps) {
+export function FileRow({ item }: FileRowProps) {
   const getFileIcon = (type: string) => {
     switch (type) {
       case "folder":
@@ -28,16 +34,10 @@ export function FileRow({ item, onFolderClick }: FileRowProps) {
     }
   };
 
-  const handleClick = () => {
-    if (item.type === "folder" && onFolderClick) {
-      onFolderClick(item as FolderItem);
-    }
-  };
-
   return (
-    <div
+    <Link
+      href={`/f/${item.id}`}
       className="cursor-pointer rounded-lg border p-3 transition-colors hover:bg-accent"
-      onClick={handleClick}
     >
       <div className="flex items-start justify-between">
         <div className="flex items-center gap-3">
@@ -59,10 +59,12 @@ export function FileRow({ item, onFolderClick }: FileRowProps) {
             <DropdownMenuItem>Download</DropdownMenuItem>
             <DropdownMenuItem>Share</DropdownMenuItem>
             <DropdownMenuItem>Move</DropdownMenuItem>
-            <DropdownMenuItem className="text-destructive">Delete</DropdownMenuItem>
+            <DropdownMenuItem className="text-destructive">
+              Delete
+            </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       </div>
-    </div>
+    </Link>
   );
 }
