@@ -4,7 +4,6 @@ import {
   folders as foldersSchema,
 } from "~/server/db/schema";
 import DriveContents from "../../drive-contents";
-import { FileItem, FolderItem } from "~/lib/mock-data";
 import { eq } from "drizzle-orm";
 
 export default async function GoogleDriveClone(props: {
@@ -26,22 +25,6 @@ export default async function GoogleDriveClone(props: {
     .select()
     .from(filesSchema)
     .where(eq(filesSchema.parent, parsedFolderId));
-    
-  const files: FileItem[] = filesFromDb.map((file: any) => ({
-    id: file.id.toString(),
-    name: file.name,
-    type: "file",
-    url: file.url,
-    parent: file.parent.toString(),
-    size: file.size.toString(),
-  }));
 
-  const folders: FolderItem[] = foldersFromDb.map((folder: any) => ({
-    id: folder.id.toString(),
-    name: folder.name,
-    type: "folder",
-    parent: folder.parent !== null ? folder.parent.toString() : null,
-  }));
-
-  return <DriveContents files={files} folders={folders} />;
+  return <DriveContents files={filesFromDb} folders={foldersFromDb} />;
 }

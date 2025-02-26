@@ -1,25 +1,22 @@
 "use client";
 
-import { useState } from "react";
 import { Button } from "~/components/ui/button";
 import {
   Breadcrumb,
   BreadcrumbItem,
   BreadcrumbLink,
   BreadcrumbList,
-  BreadcrumbPage,
   BreadcrumbSeparator,
 } from "~/components/ui/breadcrumb";
 import { Upload } from "lucide-react";
-import { mockFiles, mockFolders, FolderItem, FileItem } from "~/lib/mock-data";
-import { FileRow } from "~/app/file-row";
+import { FileRow, FolderRow } from "~/app/file-row";
 import React from "react";
 import { files, folders } from "~/server/db/schema";
 import Link from "next/link";
 
 export default function DriveContents(props: {
-  files: FileItem[];
-  folders: FolderItem[];
+  files: (typeof files.$inferSelect)[];
+  folders: (typeof folders.$inferSelect)[];
 }) {
   const breadcrumb: unknown[] = [];
 
@@ -53,10 +50,10 @@ export default function DriveContents(props: {
 
         <div className="grid grid-cols-1 gap-4 md:grid-cols-3 lg:grid-cols-4">
           {props.folders.map((folder) => (
-            <FileRow key={folder.id} item={folder} />
+            <FolderRow key={folder.id} folder={folder} />
           ))}
           {props.files.map((file) => (
-            <FileRow key={file.id} item={file} />
+            <FileRow key={file.id} file={file} />
           ))}
         </div>
       </div>
