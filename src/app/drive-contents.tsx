@@ -1,6 +1,5 @@
 "use client";
 
-import { Button } from "~/components/ui/button";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -8,18 +7,12 @@ import {
   BreadcrumbList,
   BreadcrumbSeparator,
 } from "~/components/ui/breadcrumb";
-import { Upload } from "lucide-react";
 import { FileRow, FolderRow } from "~/app/file-row";
 import React from "react";
 import { files_table, folders_table } from "~/server/db/schema";
 import Link from "next/link";
-import {
-  SignedIn,
-  SignedOut,
-  SignInButton,
-  SignUpButton,
-  UserButton,
-} from "@clerk/nextjs";
+import { SignedIn, SignedOut, SignInButton, UserButton } from "@clerk/nextjs";
+import { UploadButton } from "~/components/uploadthing";
 
 export default function DriveContents(props: {
   files: (typeof files_table.$inferSelect)[];
@@ -66,6 +59,7 @@ export default function DriveContents(props: {
             <FileRow key={file.id} file={file} />
           ))}
         </div>
+        <UploadButton endpoint="imageUploader" />
       </div>
     </div>
   );
