@@ -7,7 +7,7 @@ import {
   BreadcrumbList,
   BreadcrumbSeparator,
 } from "~/components/ui/breadcrumb";
-import { FileRow, FolderRow } from "~/app/file-row";
+import { FileRow, FolderRow } from "~/app/f/[folderId]/file-row";
 import React from "react";
 import { files_table, folders_table } from "~/server/db/schema";
 import Link from "next/link";
@@ -64,7 +64,7 @@ export default function DriveContents(props: {
           ))}
         </div>
         <UploadButton
-          endpoint="imageUploader"
+          endpoint="driveUploader"
           onClientUploadComplete={() => {
             navigate.refresh();
           }}
