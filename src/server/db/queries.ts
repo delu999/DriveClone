@@ -45,13 +45,12 @@ export const QUERIES = {
 export const MUTATIONS = {
   createFile: async function (input: {
     file: {
-        name: string,
-        size: number,
-        url: string,
-        parent: number,
+      name: string;
+      size: number;
+      url: string;
     };
     userId: string;
   }) {
-    return db.insert(filesSchema).values(input.file)
+    return db.insert(filesSchema).values({ ...input.file, parent: 1 });
   },
 };

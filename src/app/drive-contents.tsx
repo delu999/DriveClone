@@ -13,12 +13,15 @@ import { files_table, folders_table } from "~/server/db/schema";
 import Link from "next/link";
 import { SignedIn, SignedOut, SignInButton, UserButton } from "@clerk/nextjs";
 import { UploadButton } from "~/components/uploadthing";
+import { useRouter } from "next/navigation";
 
 export default function DriveContents(props: {
   files: (typeof files_table.$inferSelect)[];
   folders: (typeof folders_table.$inferSelect)[];
   parents: (typeof folders_table.$inferSelect)[];
 }) {
+  const navigate = useRouter();
+
   return (
     <div className="dark min-h-screen w-full bg-background">
       <div className="container mx-auto min-h-screen max-w-6xl p-4 text-foreground">
@@ -59,7 +62,12 @@ export default function DriveContents(props: {
             <FileRow key={file.id} file={file} />
           ))}
         </div>
-        <UploadButton endpoint="imageUploader" />
+        <UploadButton
+          endpoint="imageUploader"
+          onClientUploadComplete={() => {
+            navigate.refresh();
+          }}
+        />
       </div>
     </div>
   );

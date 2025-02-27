@@ -16,7 +16,7 @@ export function FileRow(props: { file: typeof files_table.$inferSelect }) {
 
   return (
     <Link
-      href={`/f/${file.id}`}
+      href={file.url}
       className="cursor-pointer rounded-lg border p-3 transition-colors hover:bg-accent"
     >
       <div className="flex items-start justify-between">
