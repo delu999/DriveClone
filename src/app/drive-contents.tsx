@@ -13,6 +13,13 @@ import { FileRow, FolderRow } from "~/app/file-row";
 import React from "react";
 import { files_table, folders_table } from "~/server/db/schema";
 import Link from "next/link";
+import {
+  SignedIn,
+  SignedOut,
+  SignInButton,
+  SignUpButton,
+  UserButton,
+} from "@clerk/nextjs";
 
 export default function DriveContents(props: {
   files: (typeof files_table.$inferSelect)[];
@@ -41,10 +48,14 @@ export default function DriveContents(props: {
               ))}
             </BreadcrumbList>
           </Breadcrumb>
-          <Button size="sm">
-            <Upload className="mr-2 h-4 w-4" />
-            Upload
-          </Button>
+          <div>
+            <SignedOut>
+              <SignInButton />
+            </SignedOut>
+            <SignedIn>
+              <UserButton />
+            </SignedIn>
+          </div>
         </div>
 
         <div className="grid grid-cols-1 gap-4 md:grid-cols-3 lg:grid-cols-4">
