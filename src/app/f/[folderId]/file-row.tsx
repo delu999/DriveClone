@@ -10,17 +10,15 @@ import {
 } from "~/components/ui/dropdown-menu";
 import Link from "next/link";
 import { files_table, folders_table } from "~/server/db/schema";
+import { deleteFile } from "~/server/actions";
 
 export function FileRow(props: { file: typeof files_table.$inferSelect }) {
   const { file } = props;
 
   return (
-    <Link
-      href={file.url}
-      className="cursor-pointer rounded-lg border p-3 transition-colors hover:bg-accent"
-    >
+    <div className="cursor-pointer rounded-lg border p-3 transition-colors hover:bg-accent">
       <div className="flex items-start justify-between">
-        <div className="flex items-center gap-3">
+        <Link href={file.url} className="flex items-center gap-3">
           <FileIcon className="h-8 w-8 text-gray-500" />
           <div>
             <h3 className="font-medium">{file.name}</h3>
@@ -28,7 +26,7 @@ export function FileRow(props: { file: typeof files_table.$inferSelect }) {
               <p className="text-sm text-muted-foreground">{file.size}</p>
             )}
           </div>
-        </div>
+        </Link>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="ghost" size="icon" className="h-6 w-6">
@@ -39,13 +37,18 @@ export function FileRow(props: { file: typeof files_table.$inferSelect }) {
             <DropdownMenuItem>Download</DropdownMenuItem>
             <DropdownMenuItem>Share</DropdownMenuItem>
             <DropdownMenuItem>Move</DropdownMenuItem>
-            <DropdownMenuItem className="text-destructive">
+            <DropdownMenuItem
+              className="text-destructive"
+              onClick={() => {
+                deleteFile(file.id);
+              }}
+            >
               Delete
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       </div>
-    </Link>
+    </div>
   );
 }
 
