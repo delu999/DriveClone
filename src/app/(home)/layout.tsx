@@ -1,17 +1,13 @@
-import { SignInButton } from "@clerk/nextjs";
-import { auth } from "@clerk/nextjs/server";
-import { Cloud, ArrowRight, Lock, Share2 } from "lucide-react";
+import { Cloud } from "lucide-react";
 import Link from "next/link";
-import { redirect } from "next/navigation";
-import { Button } from "~/components/ui/button";
 
-export default function Home() {
+export default function Home(props: { children: React.ReactNode }) {
   return (
     <div className="flex min-h-screen flex-col bg-gradient-to-br from-gray-950 via-gray-900 to-gray-800">
-      <main className="flex-1 flex flex-col items-center justify-center">
-        <SignInButton mode="modal" fallbackRedirectUrl={"/drive"}>
-          <Button size="lg" className="bg-white text-black">Sign In</Button>
-        </SignInButton>
+      <main className="flex-1">
+        <section className="w-full py-16 md:py-24 lg:py-32">
+          {props.children}
+        </section>
       </main>
       <footer className="border-t border-gray-800 bg-gray-950/50">
         <div className="container flex flex-col gap-4 py-10 md:flex-row md:items-center md:justify-between md:py-12">
