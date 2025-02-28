@@ -5,8 +5,9 @@ import { type Metadata } from "next";
 import { PostHogProvider } from "~/app/_providers/posthog-provider";
 
 export const metadata: Metadata = {
-  title: "Drive clone",
-  description: "My drive clone",
+  title: "Simple Drive - Store everything. Access anywhere.",
+  description:
+    "Simple Drive gives you secure cloud storage with a clean, minimal interface. No clutter, just your files.",
   icons: [{ rel: "icon", url: "/favicon.ico" }],
 };
 
