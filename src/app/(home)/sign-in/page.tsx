@@ -1,18 +1,16 @@
 import { SignInButton } from "@clerk/nextjs";
-import { auth } from "@clerk/nextjs/server";
-import { Cloud, ArrowRight, Lock, Share2 } from "lucide-react";
-import Link from "next/link";
-import { redirect } from "next/navigation";
 import { Button } from "~/components/ui/button";
 
 export default function Home() {
   return (
-    <>
-      <SignInButton mode="modal" fallbackRedirectUrl={"/drive"}>
-        <Button size="lg" className="bg-white text-black">
-          Sign In
-        </Button>
-      </SignInButton>
-    </>
+    <div className="flex min-h-[55vh]">
+      <div className="flex w-full items-center justify-center">
+        <SignInButton mode="modal" fallbackRedirectUrl={"/drive"}>
+          <Button className="h-12 bg-gray-100 px-8 text-base text-gray-900 hover:bg-gray-200">
+            Sign-in
+          </Button>
+        </SignInButton>
+      </div>
+    </div>
   );
 }
