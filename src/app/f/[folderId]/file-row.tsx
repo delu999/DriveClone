@@ -56,7 +56,10 @@ export function FolderRow(props: {
             href={`/f/${folder.id}`}
             className="flex items-center text-gray-100 hover:text-blue-400"
           >
-            <FolderIcon className="mr-3" size={20} />
+            <FolderIcon
+              className="mr-3 text-blue-400 group-hover:text-blue-500"
+              size={20}
+            />
             {folder.name}
           </Link>
         </div>
