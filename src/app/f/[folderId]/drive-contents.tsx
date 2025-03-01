@@ -1,12 +1,5 @@
 "use client";
 
-import {
-  Breadcrumb,
-  BreadcrumbItem,
-  BreadcrumbLink,
-  BreadcrumbList,
-  BreadcrumbSeparator,
-} from "~/components/ui/breadcrumb";
 import { FileRow, FolderRow } from "~/app/f/[folderId]/file-row";
 import React from "react";
 import { files_table, folders_table } from "~/server/db/schema";
@@ -14,17 +7,9 @@ import Link from "next/link";
 import { SignedIn, SignedOut, SignInButton, UserButton } from "@clerk/nextjs";
 import { UploadButton } from "~/components/uploadthing";
 import { useRouter } from "next/navigation";
-import { Cloud, FileText, Folder, Upload } from "lucide-react";
-import { Button } from "~/components/ui/button";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "~/components/ui/dropdown-menu";
+import { Cloud, Upload } from "lucide-react";
 import { usePostHog } from "posthog-js/react";
-import { twMerge } from "tailwind-merge";
+import { cn } from "~/lib/utils";
 
 export default function DriveContents(props: {
   files: (typeof files_table.$inferSelect)[];
@@ -38,9 +23,9 @@ export default function DriveContents(props: {
   return (
     <div className="flex h-screen flex-col bg-gradient-to-br from-gray-950 via-gray-900 to-gray-800">
       <header className="flex h-16 items-center justify-between border-b border-gray-800 px-6">
-        <div className="flex justify-center items-center gap-3">
+        <div className="flex items-center justify-center gap-3">
           <Cloud className="h-6 w-6 text-gray-100" />
-          <span className="text-lg font-semibold text-gray-100" style={{ marginTop: "1.1px" }}>
+          <span className="text-lg font-semibold text-gray-100">
             Simple Drive
           </span>
         </div>
@@ -53,7 +38,7 @@ export default function DriveContents(props: {
           </SignedIn>
           <UploadButton
             endpoint="driveUploader"
-            className="ut-button:hover:bg-gray-200 ut-button:text-sm ut-button:font-medium ut-button:bg-gray-100 ut-button:text-gray-900 h-8 ut-button:w-fit rounded-md bg-gray-100 px-3 text-sm font-medium text-gray-900 shadow hover:bg-gray-200 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50"
+            className="ut-button:hover:bg-gray-200 ut-button:text-sm ut-button:font-medium ut-button:bg-gray-100 ut-button:text-gray-900 ut-button:w-fit h-8 rounded-md bg-gray-100 ut-button:px-3 text-sm hover:bg-gray-200"
             appearance={{
               allowedContent: {
                 display: "none",
@@ -89,27 +74,22 @@ export default function DriveContents(props: {
       </header>
 
       <div className="flex items-center gap-2 border-b border-gray-800 px-6 py-2">
-        <Breadcrumb>
-          <BreadcrumbList>
-            <BreadcrumbItem className="text-gray-500">
-              <Link href="/f/1">My drive</Link>
-            </BreadcrumbItem>
-
-            {props.parents.map((folder, index) => (
-              <React.Fragment key={folder.id}>
-                <BreadcrumbSeparator />
-                <BreadcrumbItem>
-                  <BreadcrumbLink
-                    href={`/f/${folder.id}`}
-                    className="text-gray-500"
-                  >
-                    {folder.name}
-                  </BreadcrumbLink>
-                </BreadcrumbItem>
-              </React.Fragment>
-            ))}
-          </BreadcrumbList>
-        </Breadcrumb>
+        {props.parents.map((folder, index) => (
+          <div key={folder.id} className="flex items-center">
+            {index > 0 && <span className="mx-2 text-gray-500">{">"}</span>}
+            <Link
+              href={`/f/${folder.id}`}
+              className={cn(
+                "text-sm hover:text-gray-100",
+                index === props.parents.length - 1
+                  ? "text-gray-100"
+                  : "text-gray-400",
+              )}
+            >
+              {folder.name}
+            </Link>
+          </div>
+        ))}
       </div>
 
       <main className="flex-1 overflow-auto p-6">
@@ -123,5 +103,6 @@ export default function DriveContents(props: {
         </div>
       </main>
     </div>
+    
   );
 }
