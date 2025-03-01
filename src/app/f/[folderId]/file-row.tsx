@@ -1,11 +1,11 @@
 import React from "react";
-import { FileItem, FolderItem } from "~/lib/mock-data";
-import { FolderIcon, FileIcon, MoreVertical } from "lucide-react";
+import { FolderIcon, FileIcon, MoreVertical } from 'lucide-react';
 import { Button } from "~/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
+  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "~/components/ui/dropdown-menu";
 import Link from "next/link";
@@ -16,29 +16,40 @@ export function FileRow(props: { file: typeof files_table.$inferSelect }) {
   const { file } = props;
 
   return (
-    <div className="cursor-pointer rounded-lg border p-3 transition-colors hover:bg-accent">
-      <div className="flex items-start justify-between">
-        <Link href={file.url} className="flex items-center gap-3">
-          <FileIcon className="h-8 w-8 text-gray-500" />
-          <div>
-            <h3 className="font-medium">{file.name}</h3>
-            {"size" in file && file.size && (
-              <p className="text-sm text-muted-foreground">{file.size}</p>
-            )}
-          </div>
-        </Link>
+    <div className="group relative flex flex-col rounded-lg border border-gray-800 bg-gray-950/50 p-4 hover:bg-gray-900/50">
+      <div className="mb-2 flex items-center justify-between">
+        <div className="flex items-center gap-3 flex-1 min-w-0">
+          <FileIcon className="h-6 w-6 flex-shrink-0 text-gray-400" />
+          <Link
+            href={file.url}
+            className="text-sm font-medium text-gray-100 hover:underline truncate"
+          >
+            {file.name}
+          </Link>
+        </div>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant="ghost" size="icon" className="h-6 w-6">
+            <Button
+              variant="ghost"
+              size="icon"
+              className="h-8 w-8 flex-shrink-0 opacity-0 group-hover:opacity-100 ml-2"
+            >
               <MoreVertical className="h-4 w-4" />
             </Button>
           </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            <DropdownMenuItem>Download</DropdownMenuItem>
-            <DropdownMenuItem>Share</DropdownMenuItem>
-            <DropdownMenuItem>Move</DropdownMenuItem>
+          <DropdownMenuContent align="end" className="w-48 bg-gray-800 border-gray-700">
+            <DropdownMenuItem className="text-gray-100 focus:bg-gray-700 focus:text-gray-100">
+              Download
+            </DropdownMenuItem>
+            <DropdownMenuItem className="text-gray-100 focus:bg-gray-700 focus:text-gray-100">
+              Share
+            </DropdownMenuItem>
+            <DropdownMenuItem className="text-gray-100 focus:bg-gray-700 focus:text-gray-100">
+              Move
+            </DropdownMenuItem>
+            <DropdownMenuSeparator className="bg-gray-700" />
             <DropdownMenuItem
-              className="text-destructive"
+              className="text-red-400 focus:bg-gray-700 focus:text-red-400"
               onClick={() => {
                 deleteFile(file.id);
               }}
@@ -47,6 +58,9 @@ export function FileRow(props: { file: typeof files_table.$inferSelect }) {
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
+      </div>
+      <div className="mt-auto pt-2 text-xs text-gray-400">
+        {"size" in file && file.size && <p>{file.size}</p>}
       </div>
     </div>
   );
@@ -58,33 +72,44 @@ export function FolderRow(props: {
   const { folder } = props;
 
   return (
-    <Link
-      href={`/f/${folder.id}`}
-      className="cursor-pointer rounded-lg border p-3 transition-colors hover:bg-accent"
-    >
-      <div className="flex items-start justify-between">
-        <div className="flex items-center gap-3">
-          <FolderIcon className="h-8 w-8 text-blue-500" />
-          <div>
-            <h3 className="font-medium">{folder.name}</h3>
-          </div>
+    <div className="group relative flex flex-col rounded-lg border border-gray-800 bg-gray-950/50 p-4 hover:bg-gray-900/50">
+      <div className="mb-2 flex items-center justify-between">
+        <div className="flex items-center gap-3 flex-1 min-w-0">
+          <FolderIcon className="h-6 w-6 flex-shrink-0 text-blue-400" />
+          <Link
+            href={`/f/${folder.id}`}
+            className="text-sm font-medium text-gray-100 hover:underline truncate"
+          >
+            {folder.name}
+          </Link>
         </div>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant="ghost" size="icon" className="h-6 w-6">
+            <Button
+              variant="ghost"
+              size="icon"
+              className="h-8 w-8 flex-shrink-0 opacity-0 group-hover:opacity-100 ml-2"
+            >
               <MoreVertical className="h-4 w-4" />
             </Button>
           </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            <DropdownMenuItem>Download</DropdownMenuItem>
-            <DropdownMenuItem>Share</DropdownMenuItem>
-            <DropdownMenuItem>Move</DropdownMenuItem>
-            <DropdownMenuItem className="text-destructive">
+          <DropdownMenuContent align="end" className="w-48 bg-gray-800 border-gray-700">
+            <DropdownMenuItem className="text-gray-100 focus:bg-gray-700 focus:text-gray-100">
+              Download
+            </DropdownMenuItem>
+            <DropdownMenuItem className="text-gray-100 focus:bg-gray-700 focus:text-gray-100">
+              Share
+            </DropdownMenuItem>
+            <DropdownMenuItem className="text-gray-100 focus:bg-gray-700 focus:text-gray-100">
+              Move
+            </DropdownMenuItem>
+            <DropdownMenuSeparator className="bg-gray-700" />
+            <DropdownMenuItem className="text-red-400 focus:bg-gray-700 focus:text-red-400">
               Delete
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       </div>
-    </Link>
+    </div>
   );
 }

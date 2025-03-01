@@ -38,9 +38,9 @@ export default function DriveContents(props: {
   return (
     <div className="flex h-screen flex-col bg-gradient-to-br from-gray-950 via-gray-900 to-gray-800">
       <header className="flex h-16 items-center justify-between border-b border-gray-800 px-6">
-        <div className="flex items-center gap-3">
+        <div className="flex justify-center items-center gap-3">
           <Cloud className="h-6 w-6 text-gray-100" />
-          <span className="text-lg font-semibold text-gray-100">
+          <span className="text-lg font-semibold text-gray-100" style={{ marginTop: "1.1px" }}>
             Simple Drive
           </span>
         </div>
