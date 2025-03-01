@@ -1,68 +1,43 @@
-import React from "react";
-import { FolderIcon, FileIcon, MoreVertical } from 'lucide-react';
-import { Button } from "~/components/ui/button";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "~/components/ui/dropdown-menu";
+import { Folder as FolderIcon, FileIcon, Trash2Icon } from "lucide-react";
 import Link from "next/link";
-import { files_table, folders_table } from "~/server/db/schema";
+import { Button } from "~/components/ui/button";
 import { deleteFile } from "~/server/actions";
+import type { folders_table, files_table } from "~/server/db/schema";
 
 export function FileRow(props: { file: typeof files_table.$inferSelect }) {
   const { file } = props;
-
   return (
-    <div className="group relative flex flex-col rounded-lg border border-gray-800 bg-gray-950/50 p-4 hover:bg-gray-900/50">
-      <div className="mb-2 flex items-center justify-between">
-        <div className="flex items-center gap-3 flex-1 min-w-0">
-          <FileIcon className="h-6 w-6 flex-shrink-0 text-gray-400" />
-          <Link
+    <li
+      key={file.id}
+      className="hover:bg-gray-750 border-b border-gray-700 px-6 py-4"
+    >
+      <div className="grid grid-cols-12 items-center gap-4">
+        <div className="col-span-6 flex items-center">
+          <a
             href={file.url}
-            className="text-sm font-medium text-gray-100 hover:underline truncate"
+            className="flex items-center text-gray-100 hover:text-blue-400"
+            target="_blank"
           >
+            <FileIcon className="mr-3" size={20} />
             {file.name}
-          </Link>
+          </a>
         </div>
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button
-              variant="ghost"
-              size="icon"
-              className="h-8 w-8 flex-shrink-0 opacity-0 group-hover:opacity-100 ml-2"
-            >
-              <MoreVertical className="h-4 w-4" />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end" className="w-48 bg-gray-800 border-gray-700">
-            <DropdownMenuItem className="text-gray-100 focus:bg-gray-700 focus:text-gray-100">
-              Download
-            </DropdownMenuItem>
-            <DropdownMenuItem className="text-gray-100 focus:bg-gray-700 focus:text-gray-100">
-              Share
-            </DropdownMenuItem>
-            <DropdownMenuItem className="text-gray-100 focus:bg-gray-700 focus:text-gray-100">
-              Move
-            </DropdownMenuItem>
-            <DropdownMenuSeparator className="bg-gray-700" />
-            <DropdownMenuItem
-              className="text-red-400 focus:bg-gray-700 focus:text-red-400"
-              onClick={() => {
-                deleteFile(file.id);
-              }}
-            >
-              Delete
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
+        <div className="col-span-2 text-gray-400">{"file"}</div>
+        <div className="col-span-3 text-gray-400">{file.size} bytes</div>
+        <div className="col-span-1 text-gray-400">
+          <button
+            onClick={() => deleteFile(file.id)}
+            aria-label={`Delete ${file.name}`}
+            title={`Delete ${file.name}`}
+            className="inline-flex items-center justify-center rounded-md text-gray-400 transition-colors hover:bg-red-500/10 hover:text-red-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-500 focus-visible:ring-offset-2 focus-visible:ring-offset-gray-900 disabled:pointer-events-none disabled:opacity-50"
+            type="button"
+          >
+            <Trash2Icon className="h-5 w-5" />
+            <span className="sr-only">Delete {file.name}</span>
+          </button>
+        </div>
       </div>
-      <div className="mt-auto pt-2 text-xs text-gray-400">
-        {"size" in file && file.size && <p>{file.size}</p>}
-      </div>
-    </div>
+    </li>
   );
 }
 
@@ -70,46 +45,24 @@ export function FolderRow(props: {
   folder: typeof folders_table.$inferSelect;
 }) {
   const { folder } = props;
-
   return (
-    <div className="group relative flex flex-col rounded-lg border border-gray-800 bg-gray-950/50 p-4 hover:bg-gray-900/50">
-      <div className="mb-2 flex items-center justify-between">
-        <div className="flex items-center gap-3 flex-1 min-w-0">
-          <FolderIcon className="h-6 w-6 flex-shrink-0 text-blue-400" />
+    <li
+      key={folder.id}
+      className="hover:bg-gray-750 border-b border-gray-700 px-6 py-4"
+    >
+      <div className="grid grid-cols-12 items-center gap-4">
+        <div className="col-span-6 flex items-center">
           <Link
             href={`/f/${folder.id}`}
-            className="text-sm font-medium text-gray-100 hover:underline truncate"
+            className="flex items-center text-gray-100 hover:text-blue-400"
           >
+            <FolderIcon className="mr-3" size={20} />
             {folder.name}
           </Link>
         </div>
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button
-              variant="ghost"
-              size="icon"
-              className="h-8 w-8 flex-shrink-0 opacity-0 group-hover:opacity-100 ml-2"
-            >
-              <MoreVertical className="h-4 w-4" />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end" className="w-48 bg-gray-800 border-gray-700">
-            <DropdownMenuItem className="text-gray-100 focus:bg-gray-700 focus:text-gray-100">
-              Download
-            </DropdownMenuItem>
-            <DropdownMenuItem className="text-gray-100 focus:bg-gray-700 focus:text-gray-100">
-              Share
-            </DropdownMenuItem>
-            <DropdownMenuItem className="text-gray-100 focus:bg-gray-700 focus:text-gray-100">
-              Move
-            </DropdownMenuItem>
-            <DropdownMenuSeparator className="bg-gray-700" />
-            <DropdownMenuItem className="text-red-400 focus:bg-gray-700 focus:text-red-400">
-              Delete
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
+        <div className="col-span-3 text-gray-400"></div>
+        <div className="col-span-3 text-gray-400"></div>
       </div>
-    </div>
+    </li>
   );
 }

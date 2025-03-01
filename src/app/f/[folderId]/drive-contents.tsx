@@ -7,7 +7,7 @@ import Link from "next/link";
 import { SignedIn, SignedOut, SignInButton, UserButton } from "@clerk/nextjs";
 import { UploadButton } from "~/components/uploadthing";
 import { useRouter } from "next/navigation";
-import { Cloud, Upload } from "lucide-react";
+import { ChevronRight, Cloud, Upload } from "lucide-react";
 import { usePostHog } from "posthog-js/react";
 import { cn } from "~/lib/utils";
 
@@ -21,88 +21,97 @@ export default function DriveContents(props: {
   const posthog = usePostHog();
 
   return (
-    <div className="flex h-screen flex-col bg-gradient-to-br from-gray-950 via-gray-900 to-gray-800">
-      <header className="flex h-16 items-center justify-between border-b border-gray-800 px-6">
-        <div className="flex items-center justify-center gap-3">
-          <Cloud className="h-6 w-6 text-gray-100" />
-          <span className="text-lg font-semibold text-gray-100">
-            Simple Drive
-          </span>
-        </div>
-        <div className="flex items-center gap-6">
-          <SignedOut>
-            <SignInButton />
-          </SignedOut>
-          <SignedIn>
-            <UserButton />
-          </SignedIn>
-          <UploadButton
-            endpoint="driveUploader"
-            className="ut-button:hover:bg-gray-200 ut-button:text-sm ut-button:font-medium ut-button:bg-gray-100 ut-button:text-gray-900 ut-button:w-fit h-8 rounded-md bg-gray-100 ut-button:px-3 text-sm hover:bg-gray-200"
-            appearance={{
-              allowedContent: {
-                display: "none",
-              },
-            }}
-            content={{
-              button({ ready }) {
-                if (ready)
-                  return (
-                    <>
-                      <Upload className="mr-2 h-4 w-4" />
-                      Upload
-                    </>
-                  );
-                return "Getting ready...";
-              },
-            }}
-            onBeforeUploadBegin={(files) => {
-              posthog.capture("files_uploading", {
-                fileCount: files.length,
-              });
-
-              return files;
-            }}
-            onClientUploadComplete={() => {
-              navigate.refresh();
-            }}
-            input={{
-              folderId: props.currentFolderId,
-            }}
-          />
+    <>
+      <header className="flex h-16 items-center justify-between border-b border-gray-800 bg-gray-900 px-6">
+        <div className="mx-auto flex w-full max-w-6xl items-center justify-between">
+          <div className="flex items-center justify-center gap-3">
+            <Cloud className="h-6 w-6 text-gray-100" />
+            <span className="text-lg font-semibold text-gray-100">
+              Simple Drive
+            </span>
+          </div>
+          <div className="flex items-center gap-6">
+            <SignedOut>
+              <SignInButton />
+            </SignedOut>
+            <SignedIn>
+              <UserButton />
+            </SignedIn>
+            <UploadButton
+              endpoint="driveUploader"
+              className="ut-button:hover:bg-gray-200 ut-button:text-sm ut-button:font-medium ut-button:bg-gray-100 ut-button:text-gray-900 ut-button:w-fit ut-button:px-3 h-8 rounded-md bg-gray-100 text-sm hover:bg-gray-200"
+              appearance={{
+                allowedContent: {
+                  display: "none",
+                },
+              }}
+              content={{
+                button({ ready }) {
+                  if (ready)
+                    return (
+                      <>
+                        <Upload className="mr-2 h-4 w-4" />
+                        Upload
+                      </>
+                    );
+                  return "Getting ready...";
+                },
+              }}
+              onBeforeUploadBegin={(files) => {
+                posthog.capture("files_uploading", {
+                  fileCount: files.length,
+                });
+                return files;
+              }}
+              onClientUploadComplete={() => {
+                navigate.refresh();
+              }}
+              input={{
+                folderId: props.currentFolderId,
+              }}
+            />
+          </div>
         </div>
       </header>
-
-      <div className="flex items-center gap-2 border-b border-gray-800 px-6 py-2">
-        {props.parents.map((folder, index) => (
-          <div key={folder.id} className="flex items-center">
-            {index > 0 && <span className="mx-2 text-gray-500">{">"}</span>}
-            <Link
-              href={`/f/${folder.id}`}
-              className={cn(
-                "text-sm hover:text-gray-100",
-                index === props.parents.length - 1
-                  ? "text-gray-100"
-                  : "text-gray-400",
-              )}
-            >
-              {folder.name}
-            </Link>
+      <div className="min-h-screen bg-gray-900 p-8 text-gray-100">
+        <div className="mx-auto max-w-6xl">
+          <div className="mb-6 flex items-center justify-between">
+            <div className="flex items-center">
+              {props.parents.map((folder, index) => (
+                <div key={folder.id} className="flex items-center">
+                  {index > 0 && (
+                    <ChevronRight className="mx-2 text-gray-500" size={16} />
+                  )}
+                  <Link
+                    href={`/f/${folder.id}`}
+                    className="text-gray-300 hover:text-white"
+                  >
+                    {folder.name}
+                  </Link>
+                </div>
+              ))}
+            </div>
           </div>
-        ))}
-      </div>
-
-      <main className="flex-1 overflow-auto p-6">
-        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-          {props.folders.map((folder) => (
-            <FolderRow key={folder.id} folder={folder} />
-          ))}
-          {props.files.map((file) => (
-            <FileRow key={file.id} file={file} />
-          ))}
+          <div className="rounded-lg bg-gray-800 shadow-xl">
+            <div className="border-b border-gray-700 px-6 py-4">
+              <div className="grid grid-cols-12 gap-4 text-sm font-medium text-gray-400">
+                <div className="col-span-6">Name</div>
+                <div className="col-span-2">Type</div>
+                <div className="col-span-3">Size</div>
+                <div className="col-span-1"></div>
+              </div>
+            </div>
+            <ul>
+              {props.folders.map((folder) => (
+                <FolderRow key={folder.id} folder={folder} />
+              ))}
+              {props.files.map((file) => (
+                <FileRow key={file.id} file={file} />
+              ))}
+            </ul>
+          </div>
         </div>
-      </main>
-    </div>
-    
+      </div>
+    </>
   );
 }
